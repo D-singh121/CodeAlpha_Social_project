@@ -1,7 +1,16 @@
 const AuthPage = () => {
   return (
-	<div>AuthPage</div>
+    <>
+      <section>
+        <div>
+          logo
+        </div>
+        <div>
+          details
+        </div>
+      </section>
+    </>
   )
 }
 
-export default AuthPage
+export default AuthPage 
