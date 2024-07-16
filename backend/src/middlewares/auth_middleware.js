@@ -1,0 +1,25 @@
+import asyncHandler from "./asyncHandler.js";
+import jwt from "jsonwebtoken"
+
+
+const JWT_SECRET = process.env.JWTSECRET
+
+const isAuthenticated = asyncHandler(async (req, res, next) => {
+	try {
+		const token = req.cookies.token;
+		if (!token) {
+			return res.status(401).json({
+				message: "User not authenticated.",
+				success: false
+			})
+		}
+		const decode = await jwt.verify(token, JWT_SECRET);
+		req.user = decode.userId;
+		next();
+	} catch (error) {
+		console.log(error);
+	}
+})
+
+
+export default isAuthenticated; 

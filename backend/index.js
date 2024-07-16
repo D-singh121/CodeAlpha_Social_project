@@ -5,6 +5,8 @@ import cookieParser from "cookie-parser";
 import bodyParser from 'body-parser';
 import db_Connection from './src/database/DB_Connection.js';
 
+import user_Routes from './src/routes/user_Routes.js'
+import tweet_Routes from './src/routes/tweet_Routes.js'
 
 dotenv.config({ path: ".env" })
 const PORT = process.env.PORT || 8080
@@ -32,6 +34,10 @@ app.use(cors(corsOptions));
 app.get('/', (req, res) => {
 	res.send("Hellow,we are ready")
 })
+
+// api grouping
+app.use('/api/v1/users', user_Routes)
+app.use('/api/v1/tweet', tweet_Routes)
 
 //Port Listening
 app.listen(PORT, () => {
