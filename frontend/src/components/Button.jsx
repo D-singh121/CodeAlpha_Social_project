@@ -1,6 +1,6 @@
 const Button = ({
 	children,
-	type = 'button',
+	type = '',
 	bgColor = '#1D9BF0',
 	textColor = 'text-white',
 	userClassName = '',
