@@ -64,8 +64,38 @@ const likeOrDislike = asyncHandler(async (req, res) => {
 	}
 })
 
+const getAllTweets = asyncHandler(async (req, res) => {
+	// loggedInUser ka tweet + following user tweet
+	try {
+		const loggedInUser_ID = req.params.id;
+		const loggedInUser = await User.findById(loggedInUser_ID);
+		const loggedInUserTweets = await Tweet.find({ userId: loggedInUser_ID });  // tweet me current loggedIn user ki id match karenge
+		const followingUsersTweet = await Promise.all(loggedInUser.following.map((otherUsersId) => {
+			return Tweet.find({ userId: otherUsersId });
+		}));
+		return res.status(200).json({
+			tweets: loggedInUserTweets.concat(...followingUsersTweet), // both logged and followings users tweets.
+		})
+	} catch (error) {
+		console.log(error);
+	}
+});
 
+const getFollowingTweets = asyncHandler(async (req, res) => {
+	// loggedInUser ka tweet + following user tweet
+	try {
+		const loggedInUser_ID = req.params.id;
+		const loggedInUser = await User.findById(loggedInUser_ID);
 
+		const followingUsersTweet = await Promise.all(loggedInUser.following.map((otherUsersId) => {
+			return Tweet.find({ userId: otherUsersId });
+		}));
+		return res.status(200).json({
+			tweets: followingUsersTweet, // both logged and followings users tweets.
+		})
+	} catch (error) {
+		console.log(error);
+	}
+});
 
-
-export { createTweet, deleteTweet, likeOrDislike, };
+export { createTweet, deleteTweet, likeOrDislike, getAllTweets, getFollowingTweets };
