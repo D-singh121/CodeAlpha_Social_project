@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Home, AuthPage } from "./index.js";
-import { Feed, Profile } from '../components/index.js'
+import { Home, AuthPage, Profile_page } from "./index.js";
+import { Feed } from '../components/index.js'
 import NoPage from "./NoPage.jsx";
 
 const Body = () => {
@@ -15,7 +15,7 @@ const Body = () => {
 				},
 				{
 					path: "/profile/:id",
-					element: <Profile />
+					element: <Profile_page />
 				}
 			]
 		},
@@ -24,8 +24,8 @@ const Body = () => {
 			element: <AuthPage />
 		},
 		{
-			path:"*",
-			element: <NoPage/>
+			path: "*",
+			element: <NoPage />
 		}
 
 	])
