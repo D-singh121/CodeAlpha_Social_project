@@ -1,16 +1,22 @@
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { PiCalendarDotsDuotone } from "react-icons/pi";
 import { SlLocationPin } from "react-icons/sl";
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Avatar from 'react-avatar';
-import { useParams } from 'react-router-dom';
 import { IoMdArrowBack } from "react-icons/io";
 import { Button } from '../components';
+import useGetProfile from "../Hooks/useGetProfile";
+import { useSelector } from "react-redux";
 
 
 const Profile_page = () => {
+	const { profile } = useSelector((state) => state.user) // bringing from store
+	// console.log(loggedInUser);
+	// console.log(profile);
 	const { id } = useParams();
+	useGetProfile(id);
 
+	// useGetProfile(loggedInUser?._id);
 
 
 	return (
@@ -22,13 +28,13 @@ const Profile_page = () => {
 							<IoMdArrowBack size="24px" />
 						</Link>
 						<div className='ml-2'>
-							<h1 className='font-bold text-lg'>name</h1>
+							<h1 className='font-bold text-lg'>{profile?.name}</h1>
 							<p className='text-gray-500 text-sm'>10 post</p>
 						</div>
 					</div>
 
 					<div>
-						<img src="https://pbs.twimg.com/profile_banners/1666796553628192776/1720556153/600x200" alt="banner" width='100%'/>
+						<img src="https://pbs.twimg.com/profile_banners/1666796553628192776/1720556153/600x200" alt="banner" width='100%' />
 					</div>
 
 					<div className='absolute top-52 ml-2 border-4 border-white rounded-full'>
@@ -40,12 +46,11 @@ const Profile_page = () => {
 							textColor='black opacity-90'
 							userClassName="px-4 py-1 text-xs font-black hover:bg-gray-200 rounded-full border border-gray-400 "
 						/>
-						{/* <button className='px-4 py-1 hover:bg-gray-200 rounded-full border border-gray-400'>Edit Profile</button> */}
 					</div>
 					<div className='m-4'>
-						<h1 className='font-bold text-xl'>Devesh singh </h1>
+						<h1 className='font-bold text-xl'>{profile?.name}</h1>
 						{/* <p>{`@${profile?.username}`}</p> */}
-						<p className='opacity-80'>@Username</p>
+						<p className='opacity-80'>{profile?.userName}</p>
 					</div>
 					<div className='m-4 text-sm'>
 						<p>🌐 Exploring the web's endless possibilities with MERN Stack 🚀 | Problem solver by day, coder by night 🌙 | Coffee lover ☕ | Join me on this coding journey!</p>

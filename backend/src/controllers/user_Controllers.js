@@ -81,7 +81,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
 });
 
-const logoutUser = asyncHandler((req, res) => {
+const logoutUser = (req, res) => {
 	if (!req.cookies.token) {
 		// User is already logged out, send informative response
 		return res.status(200).json({
@@ -97,7 +97,7 @@ const logoutUser = asyncHandler((req, res) => {
 		success: true,
 		message: "User logged out successfully!"
 	});
-});
+};
 
 // before writing this create a authentication middleware.
 const bookmark = asyncHandler(async (req, res) => {

@@ -6,8 +6,52 @@ import { LiaPollHSolid } from "react-icons/lia";
 import { IoCalendarOutline } from "react-icons/io5";
 import { SlLocationPin } from "react-icons/sl";
 import { Button } from './index.js'
+import { useState } from "react";
+// import { setLoading } from "../Redux/userSlice.js";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { TWEET_API_URL_POINT } from "../Utils/Constant.js";
+import toast from "react-hot-toast";
 
 const CreatePost = () => {
+  const [description, setTweetDescription] = useState("");
+  // const dispatch = useDispatch();
+
+  const { isLoading, loggedInUser } = useSelector(store => store.user) // from store
+
+
+  const submitTweetHandler = async (e) => {
+    e.preventDefault();
+
+    // dispatch(setLoading(true))
+    try {
+      const tweetPayload = { description, id: loggedInUser?._id };  // tweet data with userId
+      console.log(tweetPayload);
+      const tweetRes = await axios.post(`${TWEET_API_URL_POINT}/create`, tweetPayload, {
+        Headers: {
+          "Content-Type": "application/json"
+        },
+        withCredentials: true
+      })
+      console.log(tweetRes);
+      if (tweetRes.data.success) {
+        toast.success(tweetRes.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+
+    }
+    // finally {
+    //   dispatch(setLoading(false))
+    // }
+
+    setTweetDescription("");
+
+  }
+
+
+
   return (
     <>
       <section className='w-[100%]'>
@@ -28,7 +72,8 @@ const CreatePost = () => {
               <div>
                 <Avatar src="https://pbs.twimg.com/profile_images/1703261403237502976/W0SFbJVS_400x400.jpg" size="40" round={true} />
               </div>
-              <input className='w-full outline-none border-none text-xl ml-5' type="text" placeholder='What is happening?!' />
+
+              <textarea value={description} onChange={(e) => setTweetDescription(e.target.value)} className='w-full outline-none border-none text-xl ml-5 mt-4' type="text" placeholder='What is happening?' />
             </div>
 
             {/* icons */}
@@ -59,7 +104,8 @@ const CreatePost = () => {
 
               </div>
               <Button
-                children='Post'
+                children={isLoading ? "Posting..." : "Post"}
+                onClick={submitTweetHandler}
                 userClassName='bg-[#1D9BF0] px-6 py-1 text-lg text-white text-right border-none rounded-full '
               />
             </div>
@@ -71,5 +117,5 @@ const CreatePost = () => {
   )
 }
 
-export default CreatePost
+export default CreatePost;
 

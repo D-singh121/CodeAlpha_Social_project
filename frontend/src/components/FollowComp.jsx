@@ -1,8 +1,10 @@
 import Avatar from "react-avatar"
 import { Button } from "./index.js"
 import { MdVerified } from "react-icons/md";
+import { Link } from "react-router-dom";
 
-const FollowComp = () => {
+const FollowComp = ({ user }) => {
+	// console.log(user);
 	return (
 		<section className="cursor-pointer">
 			<div className='flex justify-between items-center w-full hover:bg-slate-200 rounded-2xl p-2'>
@@ -12,16 +14,18 @@ const FollowComp = () => {
 
 				<div className='flex justify-between items-center w-full'>
 					<div className='ml-2'>
-						<div className='font-semibold text-md flex justify-between items-center'>Devesh Singh <span className="text-[#1d9bf0] pl-1 ">
+						<div className='font-semibold text-md flex justify-between items-center'>{user.name} <span className="text-[#1d9bf0] pl-1 ">
 							<MdVerified size='18px' />
 						</span> </div>
-						<h2 className='opacity-60 text-sm'>@Dee_777</h2>
+						<h2 className='opacity-60 text-sm'>{user.userName}</h2>
 					</div>
 
-					<Button
-						children='Follow'
-						userClassName='bg-[#000000] px-4 py-1 text-sm text-white text-right border-none rounded-full '
-					/>
+					<Link to={`/profile/${user?._id}`}>
+						<Button
+							children='Follow'
+							userClassName='bg-[#000000] px-4 py-1 text-sm text-white text-right border-none rounded-full '
+						/>
+					</Link>
 				</div>
 
 			</div>

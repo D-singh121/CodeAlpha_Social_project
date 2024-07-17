@@ -8,7 +8,9 @@ import { RiMoreFill } from "react-icons/ri";
 import { MdVerified } from "react-icons/md";
 
 import Avatar from 'react-avatar';
-const Post = () => {
+
+
+const Post = ({ tweetDetails }) => {
   return (
     <>
       <section className="p-2 border-b border-gray-200 cursor-pointer hover:bg-[#f7f8fa]">
@@ -22,7 +24,7 @@ const Post = () => {
             {/* name and id */}
             <div className="flex  justify-between  flex-row w-full items-center" >
               <div className="flex gap-2 justify-center items-center" >
-                <strong>Devesh Choudhary</strong>
+                <strong>{tweetDetails?.userDetails && tweetDetails?.userDetails[0].name}</strong>
                 <span className="text-[#1d9bf0] ">
                   <MdVerified size='18px' />
                 </span>
@@ -36,7 +38,7 @@ const Post = () => {
             </div>
 
             {/* post text */}
-            <div className="opacity-80">Any kind of post u can write here....</div>
+            <div className="opacity-80">{tweetDetails?.description}</div>
 
             {/* like,comment and share icons */}
             <div className="flex justify-between">
@@ -59,7 +61,7 @@ const Post = () => {
                   <IoMdHeartEmpty size='18px' />
 
                 </div>
-                <span className="text-sm opacity-60">1M</span>
+                <span className="text-sm opacity-60">{tweetDetails?.like.length}</span>
               </div>
 
               <div className="flex justify-between items-center hover:text-[#1d9bf0]">
