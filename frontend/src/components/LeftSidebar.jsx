@@ -90,7 +90,7 @@ const LeftSidebar = () => {
             <h1 className=' text-2xl opacity-80 ml-5'>Notifications</h1>
           </Link>
 
-          <Link to="/" className='flex items-center my-0 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full'>
+          <Link to="/bookmarks" className='flex items-center my-0 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full'>
             <div>
               <IoBookmarkOutline className='text-2xl' />
             </div>

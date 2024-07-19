@@ -13,7 +13,7 @@ import { TWEET_API_URL_POINT } from '../Utils/Constant';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { getRefresh } from "../Redux/tweetSlice";
-
+import { timeSince } from "../Utils/Constant";
 
 const Post = ({ tweetDetails }) => {
   console.log(tweetDetails);
@@ -64,8 +64,8 @@ const Post = ({ tweetDetails }) => {
                 <span className="text-[#1d9bf0] ">
                   <MdVerified size='18px' />
                 </span>
-                <span className="opacity-50">{`@${tweetDetails?.userDetails?.[0]?.userName}`}</span>
-                <span className="opacity-50">.1h</span>
+                <span className="opacity-50">{`@${tweetDetails?.userDetails?.[0]?.userName} .`}</span>
+                <span className="opacity-50">{timeSince(tweetDetails?.createdAt)}</span>
               </div>
 
               <div className="p-2 opacity-80 cursor-pointer hover:bg-[#d5efff] border-none rounded-full" >
