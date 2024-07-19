@@ -24,10 +24,21 @@ const userSlice = createSlice({
 		},
 		getMyProfile: (state, action) => {
 			state.profile = action.payload
+		},
+		followingUpdate: (state, action) => {
+			// unfollow to user
+			if (state.loggedInUser.following.includes(action.payload)) {
+				state.loggedInUser.following = state.loggedInUser.following.filter((itemId) => {
+					return itemId !== action.payload;
+				})
+			} else {
+				// follow to user
+				state.loggedInUser.following.push(action.payload);
+			}
 		}
 
 	}
 })
 
-export const { getOtherUsers, getLoggedUser, getMyProfile , setLoading } = userSlice.actions;
+export const { getOtherUsers, getLoggedUser, getMyProfile, setLoading, followingUpdate } = userSlice.actions;
 export default userSlice.reducer;

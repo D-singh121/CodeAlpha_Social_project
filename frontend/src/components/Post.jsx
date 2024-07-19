@@ -1,4 +1,4 @@
-import { CiShare2 } from "react-icons/ci";
+import { AiOutlineDelete } from "react-icons/ai";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { TbAntennaBars4 } from "react-icons/tb";
 import { IoMdHeartEmpty } from "react-icons/io";
@@ -16,26 +16,36 @@ import { getRefresh } from "../Redux/tweetSlice";
 
 
 const Post = ({ tweetDetails }) => {
+  console.log(tweetDetails);
+  const { loggedInUser } = useSelector(store => store.user);
 
   const dispatch = useDispatch();
-  const { loggedInUser } = useSelector(store => store.user);
 
   // Like and dislike handler
   const likeOrDislikeHandler = async (id) => {
     try {
       const res = await axios.put(`${TWEET_API_URL_POINT}/like/${id}`, { id: loggedInUser?._id }, {
         withCredentials: true
-      });
-      console.log(res);
+      }); 
       dispatch(getRefresh()); // to update in UI sections
       toast.success(res.data.message);
 
     } catch (error) {
       toast.success(error.response.data.message);
-      console.log(error);
     }
   }
 
+  // Tweet delete handler for loggedInUser only
+  const deleteTweetHandler = async (id) => {
+    try {
+      axios.defaults.withCredentials = true; // new way to attach credential policy.
+      const res = await axios.delete(`${TWEET_API_URL_POINT}/delete/${id}`);
+      dispatch(getRefresh());
+      toast.success(res.data.message)
+    } catch (error) {
+      toast.success(error.response.data.message)
+    }
+  }
 
   return (
     <>
@@ -50,11 +60,11 @@ const Post = ({ tweetDetails }) => {
             {/* name and id */}
             <div className="flex  justify-between  flex-row w-full items-center" >
               <div className="flex gap-2 justify-center items-center" >
-                <strong>{tweetDetails?.userDetails[0]?.name}</strong>
+                <strong>{tweetDetails?.userDetails?.[0]?.name}</strong>
                 <span className="text-[#1d9bf0] ">
                   <MdVerified size='18px' />
                 </span>
-                <span className="opacity-50">@Twitter_ID</span>
+                <span className="opacity-50">{`@${tweetDetails?.userDetails?.[0]?.userName}`}</span>
                 <span className="opacity-50">.1h</span>
               </div>
 
@@ -64,7 +74,12 @@ const Post = ({ tweetDetails }) => {
             </div>
 
             {/* post text */}
-            <div className="opacity-80">{tweetDetails?.description}</div>
+            <div className="opacity-80">
+              <p>
+                {tweetDetails?.description}
+              </p>
+            </div>
+
 
             {/* like,comment and share icons */}
             <div className="flex justify-between">
@@ -83,10 +98,10 @@ const Post = ({ tweetDetails }) => {
               </div>
 
               <div className="flex justify-between items-center hover:text-[#f50090]">
-                <div onClick={() => likeOrDislikeHandler(tweetDetails._id)} className="p-2 opacity-80 cursor-pointer hover:bg-[#f2b1d7] border-none rounded-full" >
+                <div onClick={() => likeOrDislikeHandler(tweetDetails?._id)} className="p-2 opacity-80 cursor-pointer hover:bg-[#f2b1d7] border-none rounded-full" >
                   <IoMdHeartEmpty size='18px' />
                 </div>
-                <span className="text-sm opacity-60">{tweetDetails?.like.length}</span>
+                <span className="text-sm opacity-60">{tweetDetails?.like?.length}</span>
               </div>
 
               <div className="flex justify-between items-center hover:text-[#1d9bf0]">
@@ -103,13 +118,15 @@ const Post = ({ tweetDetails }) => {
                   </div>
 
                 </div>
-
-                <div className="flex justify-between items-center hover:text-[#1d9bf0]">
-                  <div className="p-2 opacity-100 font-semibold cursor-pointer hover:bg-[#d5efff] border-none rounded-full" >
-                    <CiShare2 size='18px' />
-                  </div>
-
-                </div>
+                {
+                  loggedInUser?._id === tweetDetails?.userId && (
+                    <div className="flex justify-between items-center hover:text-[#ff3d3d]">
+                      <div onClick={() => deleteTweetHandler(tweetDetails?._id)} className="p-2 opacity-80  cursor-pointer hover:bg-[#fdbaba] border-none rounded-full" >
+                        <AiOutlineDelete size='20px' />
+                      </div>
+                    </div>
+                  )
+                }
 
               </div>
 

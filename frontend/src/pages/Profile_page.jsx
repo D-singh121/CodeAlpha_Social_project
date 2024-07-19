@@ -6,17 +6,59 @@ import Avatar from 'react-avatar';
 import { IoMdArrowBack } from "react-icons/io";
 import { Button } from '../components';
 import useGetProfile from "../Hooks/useGetProfile";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { USER_API_URL_POINT } from "../Utils/Constant";
+import toast from "react-hot-toast";
+import { followingUpdate } from "../Redux/userSlice";
+import { getRefresh } from "../Redux/tweetSlice";
 
 const Profile_page = () => {
-	const { profile } = useSelector((state) => state.user) // bringing from store
-	// console.log(loggedInUser);
-	// console.log(profile);
+	const { profile, loggedInUser } = useSelector((state) => state.user) // bringing from store
+
 	const { id } = useParams();
 	useGetProfile(id);
 
-	// useGetProfile(loggedInUser?._id);
+	const dispatch = useDispatch();
+
+	const followAndUnfollowHandler = async () => {
+		if (loggedInUser?.following.includes(id)) {
+			// Already following then unfollow
+			try {
+				const res = await axios.post(`${USER_API_URL_POINT}/unfollow/${id}`, { id: loggedInUser?._id }, {
+					headers: {
+						"Content-Type": "application/json"
+					},
+					withCredentials: true,
+				})
+				dispatch(followingUpdate(id))
+				dispatch(getRefresh());
+
+				console.log(res);
+				toast.success(res.data.message)
+			} catch (error) {
+				console.log(error);
+				toast.success(error.res.data.message)
+			}
+		} else {
+			// follow to user
+			try {
+				const res = await axios.post(`${USER_API_URL_POINT}/follow/${id}`, { id: loggedInUser?._id }, {
+					headers: {
+						"Content-Type": "application/json"
+					},
+					withCredentials: true,
+				})
+				dispatch(followingUpdate(id))
+				dispatch(getRefresh());
+				console.log(res);
+				toast.success(res.data.message)
+			} catch (error) {
+				console.log(error);
+				toast.success(error.res.data.message)
+			}
+		}
+	}
 
 
 	return (
@@ -29,7 +71,7 @@ const Profile_page = () => {
 						</Link>
 						<div className='ml-2'>
 							<h1 className='font-bold text-lg'>{profile?.name}</h1>
-							<p className='text-gray-500 text-sm'>10 post</p>
+							<p className='text-gray-500 text-sm'>59 post</p>
 						</div>
 					</div>
 
@@ -41,16 +83,26 @@ const Profile_page = () => {
 						<Avatar src="https://pbs.twimg.com/profile_images/1703261403237502976/W0SFbJVS_400x400.jpg" size="120" round={true} />
 					</div>
 					<div className='text-right m-4'>
-						<Button
-							children="Edit Profile"
-							textColor='black opacity-90'
-							userClassName="px-4 py-1 text-xs font-black hover:bg-gray-200 rounded-full border border-gray-400 "
-						/>
+						{
+							profile?._id === loggedInUser._id ? (
+								<Button
+									children="Edit Profile"
+									textColor='black opacity-90'
+									userClassName="px-4 py-1 text-xs font-black hover:bg-gray-200 rounded-full border border-gray-400 "
+								/>
+							) : (
+								<Button
+									onClick={followAndUnfollowHandler}
+									children={loggedInUser.following.includes(id) ? "Unfollow" : "Follow"}
+									textColor='black opacity-90'
+									userClassName="px-4 py-1 text-xs font-black hover:bg-gray-200 rounded-full border border-gray-400 "
+								/>
+							)
+						}
 					</div>
 					<div className='m-4'>
 						<h1 className='font-bold text-xl'>{profile?.name}</h1>
-						{/* <p>{`@${profile?.username}`}</p> */}
-						<p className='opacity-80'>{profile?.userName}</p>
+						<p className='opacity-80'>{`@${profile?.userName}`}</p>
 					</div>
 					<div className='m-4 text-sm'>
 						<p>🌐 Exploring the web's endless possibilities with MERN Stack 🚀 | Problem solver by day, coder by night 🌙 | Coffee lover ☕ | Join me on this coding journey!</p>
@@ -63,7 +115,7 @@ const Profile_page = () => {
 
 						<div className="flex justify-between items-center gap-2">
 							<PiCalendarDotsDuotone />
-							<span>Joined June 2023</span>
+							<span>Joined June 2024</span>
 						</div>
 
 						<div className="flex justify-between items-center gap-2">

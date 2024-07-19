@@ -7,24 +7,27 @@ import { IoCalendarOutline } from "react-icons/io5";
 import { SlLocationPin } from "react-icons/sl";
 import { Button } from './index.js'
 import { useState } from "react";
-// import { setLoading } from "../Redux/userSlice.js";
-import {useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { TWEET_API_URL_POINT } from "../Utils/Constant.js";
 import toast from "react-hot-toast";
 import { getRefresh } from "../Redux/tweetSlice.js";
+import { getIsActive } from "../Redux/tweetSlice.js"; // to switch from 'for you ' to 'following' page
+
+
+
 
 const CreatePost = () => {
+
   const [description, setTweetDescription] = useState("");
   const dispatch = useDispatch();
 
-  const {loggedInUser } = useSelector(store => store.user) // from store
+  const { loggedInUser } = useSelector(store => store.user) // from store and userSlice
+  const { isActive } = useSelector(store => store.tweet) // from store and userSlice
 
 
   const submitTweetHandler = async (e) => {
     e.preventDefault();
-
-    // dispatch(setLoading(true))
     try {
       const tweetPayload = { description, id: loggedInUser?._id };  // tweet data with userId
       // console.log(tweetPayload);
@@ -44,14 +47,17 @@ const CreatePost = () => {
       toast.error(error.response.data.message);
 
     }
-    // finally {
-    //   dispatch(setLoading(false))
-    // }
-s
     setTweetDescription("");
-
   }
 
+
+  // swithching from 'for you' to 'following'
+  const forYouHandler = () => {
+    dispatch(getIsActive(true));
+  }
+  const followingHandler = () => {
+    dispatch(getIsActive(false));
+  }
 
 
   return (
@@ -60,10 +66,10 @@ s
         {/* following tabs */}
         <div className="w-full">
           <div className='flex items-center cursor-pointer justify-evenly border-b border-gray-200  '>
-            <div className="hover:bg-blue-200 w-full text-center px-4 py-2">
+            <div onClick={forYouHandler} className={`${isActive ? "border-b-4 rounded-lg border-blue-600" : "border-b-4 border-transparent"} cursor-pointer hover:bg-gray-200 w-full text-center px-4 py-3`}>
               <h1 className='py-1 font-semibold text-gray-600 text-lg opacity-85'>For you</h1>
             </div>
-            <div className="hover:bg-blue-200 w-full text-center px-4 py-2" >
+            <div onClick={followingHandler} className={`${!isActive ? "border-b-4 rounded-lg border-blue-600" : "border-b-4 border-transparent"} cursor-pointer hover:bg-gray-200 w-full text-center px-4 py-3`} >
               <h1 className='py-1 font-semibold text-gray-600 text-lg opacity-85'>Following</h1>
             </div>
           </div>

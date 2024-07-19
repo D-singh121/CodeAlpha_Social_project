@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 const FollowComp = ({ user }) => {
 	// console.log(user);
+
 	return (
 		<section className="cursor-pointer">
 			<div className='flex justify-between items-center w-full hover:bg-slate-200 rounded-2xl p-2'>

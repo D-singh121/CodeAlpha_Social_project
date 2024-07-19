@@ -5,7 +5,7 @@ const tweetSlice = createSlice({
 	initialState: {
 		tweets: null,
 		refresh: false,
-		isActive: true
+		isActive: true // default pe hum 'for you' section pe honge.
 	},
 	reducers: {
 		getAllTweets: (state, action) => {
