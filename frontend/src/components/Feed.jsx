@@ -6,7 +6,7 @@ import Post from "./Post";
 const Feed = () => {
 
   const { tweets } = useSelector((store => store.tweet));
-  console.log(tweets);
+  // console.log(tweets);
 
   return (
     <div className="w-[55%] border-x border-gray-300">

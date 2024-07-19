@@ -8,6 +8,7 @@ import { getOtherUsers } from "../Redux/userSlice.js"
 
 const useGetOtherUsers = (id) => {
 	const dispatch = useDispatch();
+	
 	useEffect(() => {
 		const otherUsers = async () => {
 			dispatch(setLoading(true))

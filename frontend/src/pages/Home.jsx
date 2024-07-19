@@ -15,7 +15,7 @@ const Home = () => {
 			: (navigate("/"))
 	}, [])
 
-	useGetMyTweets(loggedInUser?._id)
+	useGetMyTweets(loggedInUser?._id) // fetching all tweets from store 
 
 	return (
 		<>

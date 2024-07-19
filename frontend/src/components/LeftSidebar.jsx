@@ -6,7 +6,8 @@ import toast from 'react-hot-toast';
 import { GoHome, GoPeople } from "react-icons/go";
 import { IoMdLogOut } from "react-icons/io";
 import { IoNotificationsOutline, IoSearchOutline } from "react-icons/io5";
-import { MdOutlineLocalPostOffice, MdOutlineMoreHoriz } from "react-icons/md";
+import { MdOutlineMoreHoriz } from "react-icons/md";
+import { IoBookmarkOutline } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 
 import { USER_API_URL_POINT } from '../Utils/Constant';
@@ -91,9 +92,9 @@ const LeftSidebar = () => {
 
           <Link to="/" className='flex items-center my-0 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full'>
             <div>
-              <MdOutlineLocalPostOffice className='text-2xl' />
+              <IoBookmarkOutline className='text-2xl' />
             </div>
-            <h1 className=' text-2xl opacity-80 ml-5'>Messages</h1>
+            <h1 className=' text-2xl opacity-80 ml-5'>Bookmarks</h1>
           </Link>
 
           <Link to="/" className='flex items-center my-0 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full'>

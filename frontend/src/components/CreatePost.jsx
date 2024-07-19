@@ -8,16 +8,17 @@ import { SlLocationPin } from "react-icons/sl";
 import { Button } from './index.js'
 import { useState } from "react";
 // import { setLoading } from "../Redux/userSlice.js";
-import { useSelector } from "react-redux";
+import {useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { TWEET_API_URL_POINT } from "../Utils/Constant.js";
 import toast from "react-hot-toast";
+import { getRefresh } from "../Redux/tweetSlice.js";
 
 const CreatePost = () => {
   const [description, setTweetDescription] = useState("");
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  const { isLoading, loggedInUser } = useSelector(store => store.user) // from store
+  const {loggedInUser } = useSelector(store => store.user) // from store
 
 
   const submitTweetHandler = async (e) => {
@@ -26,17 +27,18 @@ const CreatePost = () => {
     // dispatch(setLoading(true))
     try {
       const tweetPayload = { description, id: loggedInUser?._id };  // tweet data with userId
-      console.log(tweetPayload);
+      // console.log(tweetPayload);
       const tweetRes = await axios.post(`${TWEET_API_URL_POINT}/create`, tweetPayload, {
         Headers: {
           "Content-Type": "application/json"
         },
         withCredentials: true
       })
-      console.log(tweetRes);
+      dispatch(getRefresh());  // tweet post ko feed me refresh karne ke liye.
       if (tweetRes.data.success) {
         toast.success(tweetRes.data.message);
       }
+
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
@@ -45,7 +47,7 @@ const CreatePost = () => {
     // finally {
     //   dispatch(setLoading(false))
     // }
-
+s
     setTweetDescription("");
 
   }
@@ -104,7 +106,7 @@ const CreatePost = () => {
 
               </div>
               <Button
-                children={isLoading ? "Posting..." : "Post"}
+                children={"Post"}
                 onClick={submitTweetHandler}
                 userClassName='bg-[#1D9BF0] px-6 py-1 text-lg text-white text-right border-none rounded-full '
               />
