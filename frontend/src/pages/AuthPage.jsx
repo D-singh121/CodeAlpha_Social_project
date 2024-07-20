@@ -95,7 +95,7 @@ const AuthPage = () => {
         <div className='w-screen h-screen flex items-center justify-center'>
           <div className='flex items-center justify-evenly w-[80%]'>
             <div>
-              <img className='ml-5' width={"300px"} src="../../public/twitternew.png" alt="twitter-logo" />
+              <img className='ml-5' width={"300px"} src="/twitternew.png" alt="twitter-logo" />
             </div>
 
             <div>
@@ -146,9 +146,15 @@ const AuthPage = () => {
                   userClassName='bg-[#1D9BF0] border-none py-2 my-4 rounded-full text-lg text-white'
                   children={!isLoading ? (isLogin ? "Login" : "Create Account") : ("Loading....")}
                 />
-                <h1>{isLogin ? "Do not have an account?" : "Already have an account?"} <span onClick={loginSignupHandler} className='font-bold text-blue-600 cursor-pointer'>{isLogin ? "Signup" : "Login"}</span></h1>
+                <h1>{isLogin ? "Do not have an account?" : "Already have an account?"} <span onClick={loginSignupHandler} className='font-bold text-blue-600 cursor-pointer hover:underline'>{isLogin ? "Signup" : "Login"}</span></h1>
+
+                {
+                  isLogin ? <p onClick={() => navigate("/forgetpass")} className=' text-blue-600 font-medium cursor-pointer hover:underline'>Forget Password</p> : ""
+                }
+
               </form>
             </div>
+          
           </div>
         </div>
       </section>

@@ -3,6 +3,8 @@ import { Home, AuthPage, Profile_page } from "./index.js";
 import { Feed } from '../components/index.js'
 import NoPage from "./NoPage.jsx";
 import Bookmarks_page from "./Bookmarks_page.jsx";
+import ForgetPassword from "./Forget_pass.jsx";
+import ResetPassword from "./ResetPassword.jsx";
 
 const Body = () => {
 	const appRouter = createBrowserRouter([
@@ -27,6 +29,14 @@ const Body = () => {
 		{
 			path: "/login",
 			element: <AuthPage />
+		},
+		{
+			path: "/forgetpass",
+			element: <ForgetPassword />
+		},
+		{
+			path: "/resetPass/:resetToken",
+			element: <ResetPassword />
 		},
 		{
 			path: "*",

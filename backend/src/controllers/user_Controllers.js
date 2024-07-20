@@ -1,7 +1,8 @@
-import { User } from '../models/user_model.js'
-import asyncHandler from '../middlewares/asyncHandler.js'
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
+import { User } from '../models/user_model.js';
+import asyncHandler from '../middlewares/asyncHandler.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import nodemailer from "nodemailer";
 
 
 const registerUser = asyncHandler(async (req, res, next) => {
@@ -208,6 +209,117 @@ const unfollow = asyncHandler(async (req, res) => {
 });
 
 
-export { registerUser, loginUser, logoutUser, bookmark, getMyProfile, getOtherUsers, follow, unfollow };
+// forget and reset password 
+
+const forgetPassword = async (req, res, next) => {
+	try {
+		const { email } = req.body;
+		if (!email || "") {
+			return res.status(401).json({
+				message: "Please provide your email !",
+				success: false
+			})
+		};
+
+		const user = await User.findOne({ email });
+		if (!user) {
+			return res.status(401).json({
+				message: "Please enter valid email, you are not registered !",
+				success: false
+			})
+		}
+
+		const userId = user._id;
+		console.log(userId);
+		// Generate a unique JWT token for the user that contains the user's id
+		const resetToken = jwt.sign({ userId }, process.env.JWTSECRET, { expiresIn: "1h", });
+		console.log(resetToken);
+
+		// Send the token to the user's email
+		const transporter = nodemailer.createTransport({
+			service: "gmail",
+			host: "smtp.gmail.com",
+			port: 587,
+			secure: false,
+			auth: {
+				user: process.env.ADMIN_EMAIL,   // host email
+				pass: process.env.ADMIN_EMAIL_PASSWORD, // host emails part
+			},
+		});
+
+		// Email configuration
+		const mailOptions = {
+			from: process.env.ADMIN_EMAIL,
+			to: email, //receiver email
+			subject: "Reset Password",
+			html: `<h1>Reset Your Password</h1>
+           	<p>Click on the following link to reset your password:</p>
+		    <p><a href="http://localhost:5173/resetPass/${resetToken}">Reset Password</a></p>
+    		<p>The link will expire in 10 minutes.</p>
+    		<p>If you didn't request a password reset, please ignore this email.</p>`,
+		};
+
+		transporter.sendMail(mailOptions, function (error, info) {
+			if (error) {
+				console.log(error);
+			} else {
+				console.log('Email sent: ' + info.response);
+				// do something useful
+			}
+		});
+
+
+		res.status(200).json({
+			message: `Reset Token has been sent to ${user.email}`,
+			success: true
+		})
+	} catch (err) {
+		console.log(err);
+		res.status(500).send({ message: err.message });
+	}
+};
+
+const resetPassword = async (req, res, next) => {
+	try {
+		const { resetToken } = req.params; // url param se token ko get kar lenge 
+		const { newPassword } = req.body; // user se new password input lenge;
+		// console.log(resetToken, newPassword);
+
+		const decodedToken = await jwt.verify(resetToken, process.env.JWTSECRET); // token ko verify karke usme se user ko nikal lenge.
+
+		const userId = decodedToken.userId // user ki id ko get kar rahe hai decoded token se 
+		console.log(userId);
+
+		const hashedNewPassword = await bcrypt.hash(newPassword, 16) // hashing the new password entered by user.
+
+		const result = await User.findOneAndUpdate(
+			{ _id: userId }, // Match the document by user ID
+			{ $set: { password: hashedNewPassword } }, // Set the new password
+			{ new: true } // Return the updated document
+		); // new hashed password ko database me update kar denge .
+
+		if (!result) {
+			return res.status(404).json({
+				status: false,
+				message: "User not found"
+			});
+		}
+
+		res.status(201).json({
+			status: true,
+			message: "Password Updated successfully.. !"
+		});
+		// res.redirect('/login');
+	} catch (error) {
+		console.error("Error updating password:", error);
+		return res.status(500).json({
+			status: false,
+			message: "Internal server error.. !"
+		})
+	}
+}
+
+
+export { registerUser, loginUser, logoutUser, bookmark, getMyProfile, getOtherUsers, follow, unfollow, resetPassword, forgetPassword };
 
 
