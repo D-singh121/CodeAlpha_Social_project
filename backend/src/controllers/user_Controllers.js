@@ -41,7 +41,6 @@ const registerUser = asyncHandler(async (req, res, next) => {
 	};
 });
 
-
 const loginUser = asyncHandler(async (req, res, next) => {
 	const { email, password } = req.body;
 	if (!email || !password) {
@@ -100,6 +99,8 @@ const logoutUser = (req, res) => {
 	});
 };
 
+
+
 // before writing this create a authentication middleware.
 const bookmark = asyncHandler(async (req, res) => {
 	try {
@@ -123,7 +124,6 @@ const bookmark = asyncHandler(async (req, res) => {
 		console.log(error);
 	}
 });
-
 
 const getMyProfile = asyncHandler(async (req, res) => {
 	try {
@@ -155,6 +155,7 @@ const getOtherUsers = asyncHandler(async (req, res) => {
 		console.log(error);
 	}
 });
+
 
 const follow = asyncHandler(async (req, res) => {
 	// If USER-A follow to the USER-B then User'A' will be store as a 'follower' in USER-B and USER-B as 'following' in USER-A
@@ -210,7 +211,6 @@ const unfollow = asyncHandler(async (req, res) => {
 
 
 // forget and reset password 
-
 const forgetPassword = async (req, res, next) => {
 	try {
 		const { email } = req.body;

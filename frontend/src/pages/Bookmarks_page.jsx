@@ -8,7 +8,6 @@ const Bookmarks_page = () => {
 				<div className="w-full  border-gray-200 flex justify-center items-center flex-col" >
 					<h1 className="text-3xl">Your all Bookmarks..!</h1>
 					<div>
-						Bookmarks list
 						<Post />
 					</div>
 				</div>

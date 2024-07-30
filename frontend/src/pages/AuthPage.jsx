@@ -50,7 +50,7 @@ const AuthPage = () => {
         }
       } catch (error) {
         // console.log(error);
-        toast.success(error.response.data.message)
+        toast.error(error.response.data.message)
       } finally {
         dispatch(setLoading(false))
       }
@@ -75,7 +75,7 @@ const AuthPage = () => {
         }
       } catch (error) {
         dispatch(setLoading(false))
-        toast.success(error.response.data.message);
+        toast.error(error.response.data.message);
         // console.log(error);
       } finally {
         dispatch(setLoading(false))
