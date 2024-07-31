@@ -1,0 +1,6 @@
+# .dockerignore
+node_modules
+.dockerignore
+.git
+.gitignore
+# .env  # Ensure this is not uncommented

@@ -1,0 +1,25 @@
+version: "3.9"
+
+networks:
+  twitter-net:
+
+services:
+  server:
+    # build: ./backend
+    image: devesh121/back-tweet:latest
+    container_name: tweet-back
+    ports:
+      - "8000:8000" # Adjust port if needed
+    env_file: ./backend/.env
+    networks:
+      - twitter-net
+
+  client:
+    # build: ./frontend
+    image: devesh121/front-tweet:latest
+    container_name: tweet-front
+    env_file: ./frontend/.env
+    ports:
+      - "5173:5173" # Adjust port if needed
+    networks:
+      - twitter-net
