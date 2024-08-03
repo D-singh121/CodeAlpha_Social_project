@@ -29,8 +29,8 @@ metadata:
 spec:
   selector:
     app: tweet-front-client
-  type: LoadBalancer
   ports:
     - protocol: TCP
       port: 5173
       targetPort: 5173
+      nodePort: 30001
