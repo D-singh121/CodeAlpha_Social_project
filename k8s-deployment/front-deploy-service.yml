@@ -18,7 +18,7 @@ spec:
           ports:
             - containerPort: 5173
           envFrom:
-            - configMap:
+            - configMapRef:
                 name: tweet-front-client-config # Create a ConfigMap for .env
 
 ---
