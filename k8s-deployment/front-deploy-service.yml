@@ -29,6 +29,7 @@ metadata:
 spec:
   selector:
     app: tweet-front-client
+  type: NodePort
   ports:
     - protocol: TCP
       port: 5173

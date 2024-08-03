@@ -29,6 +29,7 @@ metadata:
 spec:
   selector:
     app: tweet-back-server
+  type: NodePort
   ports:
     - protocol: TCP
       port: 8000
