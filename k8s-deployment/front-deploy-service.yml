@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tweet-back-client
+  name: tweet-front-client
 spec:
-  replicas: 1 # Adjust replicas as needed
+  replicas: 2 # Adjust replicas as needed
   selector:
     matchLabels:
-      app: tweet-back-client
+      app: tweet-front-client
   template:
     metadata:
       labels:
-        app: tweet-back-client
+        app: tweet-front-client
     spec:
       containers:
         - name: tweet-front
@@ -19,16 +19,16 @@ spec:
             - containerPort: 5173
           envFrom:
             - configMap:
-                name: tweet-back-client-config # Create a ConfigMap for .env
+                name: tweet-front-client-config # Create a ConfigMap for .env
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: tweet-back-client
+  name: tweet-front-client
 spec:
   selector:
-    app: tweet-back-client
+    app: tweet-front-client
   ports:
     - protocol: TCP
       port: 5173
