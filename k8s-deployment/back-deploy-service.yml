@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tweet-back-server
+spec:
+  replicas: 2 # Adjust replicas as needed
+  selector:
+    matchLabels:
+      app: tweet-back-server
+  template:
+    metadata:
+      labels:
+        app: tweet-back-server
+    spec:
+      containers:
+        - name: tweet-back
+          image: devesh121/back-tweet:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secret:
+                name: tweet-back-server-secrets # Create a ConfigMap for .env
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tweet-back-server
+spec:
+  selector:
+    app: tweet-back-server
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000

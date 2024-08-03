@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tweet-back-client
+spec:
+  replicas: 1 # Adjust replicas as needed
+  selector:
+    matchLabels:
+      app: tweet-back-client
+  template:
+    metadata:
+      labels:
+        app: tweet-back-client
+    spec:
+      containers:
+        - name: tweet-front
+          image: devesh121/front-tweet:latest
+          ports:
+            - containerPort: 5173
+          envFrom:
+            - configMap:
+                name: tweet-back-client-config # Create a ConfigMap for .env
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tweet-back-client
+spec:
+  selector:
+    app: tweet-back-client
+  ports:
+    - protocol: TCP
+      port: 5173
+      targetPort: 5173
+type: LoadBalancer
